@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/jon-wade/oriClient/client"
@@ -16,40 +17,35 @@ const (
 	defaultHost = "localhost"
 )
 
-func validateSummationInputs(args []string) (int64, int64) {
+func validateSummationInputs(args []string) (int64, int64, error) {
 	if len(args) < 2 {
-		fmt.Println("summation requires two arguments")
-		os.Exit(1)
+		return 0, 0, errors.New("summation requires two arguments")
 	}
 
 	first, err := strconv.ParseInt(args[0], 10, 64)
 	if err != nil {
-		fmt.Println("arguments must be integers")
-		os.Exit(1)
+		return 0, 0, errors.New("arguments must be integers")
 	}
 
 	last, err := strconv.ParseInt(args[1], 10, 64)
 	if err != nil {
-		fmt.Println("arguments must be integers")
-		os.Exit(1)
+		return 0, 0, errors.New("arguments must be integers")
 	}
 
-	return first, last
+	return first, last, nil
 }
 
-func validateFactorialInputs(args []string) int64 {
+func validateFactorialInputs(args []string) (int64, error) {
 	if len(args) < 1 {
-		fmt.Println("factorial requires one argument")
-		os.Exit(1)
+		return 0, errors.New("factorial requires one argument")
 	}
 
 	base, err := strconv.ParseInt(args[0], 10, 64)
 	if err != nil {
-		fmt.Println("argument must be an integer")
-		os.Exit(1)
+		return 0, errors.New("argument must be an integer")
 	}
 
-	return base
+	return base, nil
 }
 
 func Init(ctx context.Context) {
@@ -66,10 +62,18 @@ func Init(ctx context.Context) {
 
 	switch *method {
 	case "summation":
-		first, last := validateSummationInputs(args)
+		first, last, err := validateSummationInputs(args)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
 		methods.Summation(ctx, c, first, last)
 	case "factorial":
-		base := validateFactorialInputs(args)
+		base, err := validateFactorialInputs(args)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
 		methods.Factorial(ctx, c, base)
 	default:
 		fmt.Println("expected -method flag to be set to 'summation' or 'factorial'")
