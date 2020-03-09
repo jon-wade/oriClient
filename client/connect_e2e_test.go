@@ -3,11 +3,12 @@ package client_test
 import (
 	"context"
 	"github.com/jon-wade/oriClient/client"
+	"google.golang.org/grpc"
 	"testing"
 	"time"
 )
 
-func TestConnect(t *testing.T) {
+func TestConnectE2E(t *testing.T) {
 	tests := []struct {
 		address string
 	}{
@@ -19,7 +20,7 @@ func TestConnect(t *testing.T) {
 	defer cancel()
 
 	for idx, testData := range tests {
-		_, err := client.Connect(ctx, testData.address)
+		_, err := client.Connect(ctx, testData.address, grpc.DialContext)
 		switch idx {
 		case 0:
 			if err != nil {

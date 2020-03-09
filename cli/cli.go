@@ -6,16 +6,16 @@ import (
 	"flag"
 	"fmt"
 	"github.com/jon-wade/oriClient/client"
-	"github.com/jon-wade/oriClient/methods"
 	pb "github.com/jon-wade/oriServer/ori"
+	"google.golang.org/grpc"
 	"log"
 	"os"
 	"strconv"
 )
 
 const (
-	defaultPort = 50051
-	defaultHost = "localhost"
+	DefaultPort = 50051
+	DefaultHost = "localhost"
 )
 
 func validateSummationInputs(args []string) (int64, int64, error) {
@@ -50,8 +50,8 @@ func validateFactorialInputs(args []string) (int64, error) {
 }
 
 func Init(ctx context.Context) {
-	host := flag.String("host", defaultHost, "hostname of oriserver, e.g. localhost")
-	port := flag.Int("port", defaultPort, "port number of oriserver, e.g. 50051")
+	host := flag.String("host", DefaultHost, "hostname of oriserver, e.g. localhost")
+	port := flag.Int("port", DefaultPort, "port number of oriserver, e.g. 50051")
 	method := flag.String("method", "", "math helper method, e.g. summation or factorial")
 
 	flag.Parse()
@@ -59,7 +59,7 @@ func Init(ctx context.Context) {
 
 	// establish connection to server
 	fmt.Printf("connecting to %s:%d\n", *host, *port)
-	conn, err := client.Connect(ctx, fmt.Sprintf("%s:%d", *host, *port))
+	conn, err := client.Connect(ctx, fmt.Sprintf("%s:%d", *host, *port), grpc.DialContext)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
@@ -75,14 +75,14 @@ func Init(ctx context.Context) {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
-		methods.Summation(ctx, c, first, last)
+		client.Summation(ctx, c, first, last)
 	case "factorial":
 		base, err := validateFactorialInputs(args)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
-		methods.Factorial(ctx, c, base)
+		client.Factorial(ctx, c, base)
 	default:
 		fmt.Println("expected -method flag to be set to 'summation' or 'factorial'")
 		os.Exit(1)
