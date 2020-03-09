@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	pb "github.com/jon-wade/oriServer/ori"
-	"log"
 )
 
 func Summation(ctx context.Context, c pb.MathHelperClient, first int64, last int64) (int64, error) {
@@ -12,18 +11,14 @@ func Summation(ctx context.Context, c pb.MathHelperClient, first int64, last int
 		return 0, err
 	}
 
-	log.Printf("summationResult: %d", s.GetResult())
-
 	return s.GetResult(), nil
 }
 
-func Factorial(ctx context.Context, c pb.MathHelperClient, base int64) int64 {
+func Factorial(ctx context.Context, c pb.MathHelperClient, base int64) (int64, error) {
 	f, err := c.Factorial(ctx, &pb.FactorialInput{Base: base})
 	if err != nil {
-		log.Fatalf("factorialError: %v", err)
+		return 0, err
 	}
 
-	log.Printf("factorialResult: %d", f.GetResult())
-
-	return f.GetResult()
+	return f.GetResult(), nil
 }

@@ -1,4 +1,4 @@
-package cli
+package validate
 
 import (
 	"errors"
@@ -23,7 +23,7 @@ func TestValidateSummationInputs(t *testing.T) {
 		testName := fmt.Sprintf("args=%v,first=%d,last=%d,err=%s",
 			testData.args, testData.first, testData.last, testData.err)
 		t.Run(testName, func(t *testing.T) {
-			first, last, err := validateSummationInputs(testData.args)
+			first, last, err := SummationInputs(testData.args)
 			if first != testData.first {
 				t.Errorf("Expected first=%d, got %v", testData.first, first)
 			}
@@ -53,7 +53,7 @@ func TestValidateFactorialInputs(t *testing.T) {
 		testName := fmt.Sprintf("args=%v,base=%d,err=%s",
 			testData.args, testData.base, testData.err)
 		t.Run(testName, func(t *testing.T) {
-			base, err := validateFactorialInputs(testData.args)
+			base, err := FactorialInputs(testData.args)
 			if base != testData.base {
 				t.Errorf("Expected base=%d, got %d", testData.base, base)
 			}

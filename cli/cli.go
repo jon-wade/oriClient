@@ -2,52 +2,20 @@ package cli
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
+	"github.com/jon-wade/oriClient/cli/validate"
 	"github.com/jon-wade/oriClient/client"
 	pb "github.com/jon-wade/oriServer/ori"
 	"google.golang.org/grpc"
 	"log"
-	"os"
-	"strconv"
 )
 
+// as these are default values and not sensitive, have not added further config complexity by extracting as env vars
 const (
 	DefaultPort = 50051
 	DefaultHost = "localhost"
 )
-
-func validateSummationInputs(args []string) (int64, int64, error) {
-	if len(args) < 2 {
-		return 0, 0, errors.New("summation requires two arguments")
-	}
-
-	first, err := strconv.ParseInt(args[0], 10, 64)
-	if err != nil {
-		return 0, 0, errors.New("arguments must be integers")
-	}
-
-	last, err := strconv.ParseInt(args[1], 10, 64)
-	if err != nil {
-		return 0, 0, errors.New("arguments must be integers")
-	}
-
-	return first, last, nil
-}
-
-func validateFactorialInputs(args []string) (int64, error) {
-	if len(args) < 1 {
-		return 0, errors.New("factorial requires one argument")
-	}
-
-	base, err := strconv.ParseInt(args[0], 10, 64)
-	if err != nil {
-		return 0, errors.New("argument must be an integer")
-	}
-
-	return base, nil
-}
 
 func Init(ctx context.Context) {
 	host := flag.String("host", DefaultHost, "hostname of oriserver, e.g. localhost")
@@ -61,8 +29,7 @@ func Init(ctx context.Context) {
 	fmt.Printf("connecting to %s:%d\n", *host, *port)
 	conn, err := client.Connect(ctx, fmt.Sprintf("%s:%d", *host, *port), grpc.DialContext)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	// create gRPC client
@@ -70,22 +37,33 @@ func Init(ctx context.Context) {
 
 	switch *method {
 	case "summation":
-		first, last, err := validateSummationInputs(args)
+		first, last, err := validate.SummationInputs(args)
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			log.Fatal(err.Error())
 		}
-		client.Summation(ctx, c, first, last)
+
+		result, err := client.Summation(ctx, c, first, last)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Printf("summationResult: %d", result)
+		break
 	case "factorial":
-		base, err := validateFactorialInputs(args)
+		base, err := validate.FactorialInputs(args)
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			log.Fatal(err.Error())
 		}
-		client.Factorial(ctx, c, base)
+
+		result, err := client.Factorial(ctx, c, base)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Printf("factorialResult: %d", result)
+		break
 	default:
-		fmt.Println("expected -method flag to be set to 'summation' or 'factorial'")
-		os.Exit(1)
+		log.Fatal("expected -method flag to be set to 'summation' or 'factorial'")
 	}
 
 	defer func() {
