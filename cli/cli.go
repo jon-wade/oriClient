@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/jon-wade/oriClient/client"
 	"github.com/jon-wade/oriClient/methods"
+	pb "github.com/jon-wade/oriServer/ori"
 	"log"
 	"os"
 	"strconv"
@@ -57,8 +58,15 @@ func Init(ctx context.Context) {
 	args := flag.Args()
 
 	// establish connection to server
-	c, conn := client.Connect(fmt.Sprintf("%s:%d", *host, *port))
 	fmt.Printf("connecting to %s:%d\n", *host, *port)
+	conn, err := client.Connect(ctx, fmt.Sprintf("%s:%d", *host, *port))
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	// create gRPC client
+	c := pb.NewMathHelperClient(conn)
 
 	switch *method {
 	case "summation":

@@ -1,20 +1,16 @@
 package client
 
 import (
-	pb "github.com/jon-wade/oriServer/ori"
+	"context"
 	"google.golang.org/grpc"
-	"log"
 )
 
-func Connect(address string) (pb.MathHelperClient, *grpc.ClientConn) {
+func Connect(ctx context.Context, address string) (*grpc.ClientConn, error) {
 	// set up a connection to the server
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.DialContext(ctx, address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		return nil, err
 	}
 
-	// create gRPC client
-	c := pb.NewMathHelperClient(conn)
-
-	return c, conn
+	return conn, nil
 }
