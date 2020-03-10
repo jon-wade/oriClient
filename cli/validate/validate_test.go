@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestValidateSummationInputs(t *testing.T) {
+func TestValidateSummationInputsUnit(t *testing.T) {
 	tests := []struct {
 		args []string
 		first int64
@@ -37,7 +37,7 @@ func TestValidateSummationInputs(t *testing.T) {
 	}
 }
 
-func TestValidateFactorialInputs(t *testing.T) {
+func TestValidateFactorialInputsUnit(t *testing.T) {
 	tests := []struct {
 		args []string
 		base int64

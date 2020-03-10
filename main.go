@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// create a context for the connection
+	// create a context for the gRPC connection
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
