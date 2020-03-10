@@ -30,8 +30,8 @@ Usage of ./oriClient:
         port number of oriserver, e.g. 50051 (default 50051)
 ```
 
-An example command would be `./oriClient -method=factorial 5` which would request the server to calculate the `5!` at
-address `localhost:50051`. 
+An example command would be `./oriClient -method=factorial 5` which would request the server to calculate the result of
+`5!` at address `localhost:50051`. 
 
 Another example, `./oriClient -host=192.168.0.1 -port=8080 summation 2 2` would call the
 `oriServer` at `192.168.0.1:8080` requesting the result of `2 + 2`.
