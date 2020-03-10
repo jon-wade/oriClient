@@ -12,7 +12,7 @@ var summationCallIdx = 0
 var factorialCallIdx = 0
 
 // here were mocking out the MathHelperClient by implementing the methods of the MathHelperClient interface
-type mockMathHelperClient struct {}
+type mockMathHelperClient struct{}
 
 func (c mockMathHelperClient) Summation() (int64, error) {
 	summationCallIdx++
@@ -53,10 +53,10 @@ func (c mockMathHelperClient) Factorial() (int64, error) {
 
 func TestSummationUnit(t *testing.T) {
 	tests := []struct {
-		first int64
-		last int64
+		first  int64
+		last   int64
 		result int64
-		err error
+		err    error
 	}{
 		{2, 2, 4, nil},
 		{math.MaxInt64, 1, 0, status.Errorf(codes.OutOfRange, "summation result exceeds maximum integer value")},
@@ -80,9 +80,9 @@ func TestSummationUnit(t *testing.T) {
 
 func TestFactorialUnit(t *testing.T) {
 	tests := []struct {
-		base int64
+		base   int64
 		result int64
-		err error
+		err    error
 	}{
 		{5, 120, nil},
 		{21, 0, status.Errorf(codes.OutOfRange, "factorial result exceeds maximum integer value")},

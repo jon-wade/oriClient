@@ -8,10 +8,10 @@ import (
 
 func TestValidateSummationInputsUnit(t *testing.T) {
 	tests := []struct {
-		args []string
+		args  []string
 		first int64
-		last int64
-		err error
+		last  int64
+		err   error
 	}{
 		{[]string{"2", "2"}, 2, 2, nil},
 		{[]string{"a", "2"}, 0, 0, errors.New("arguments must be integers")},
@@ -30,7 +30,7 @@ func TestValidateSummationInputsUnit(t *testing.T) {
 			if last != testData.last {
 				t.Errorf("Expected last=%d, got %v", testData.last, last)
 			}
-			if err !=nil && err.Error() != testData.err.Error() {
+			if err != nil && err.Error() != testData.err.Error() {
 				t.Errorf("Expected err=%s, got %s", testData.err.Error(), err.Error())
 			}
 		})
@@ -41,7 +41,7 @@ func TestValidateFactorialInputsUnit(t *testing.T) {
 	tests := []struct {
 		args []string
 		base int64
-		err error
+		err  error
 	}{
 		{[]string{"2"}, 2, nil},
 		{[]string{"a"}, 0, errors.New("argument must be an integer")},

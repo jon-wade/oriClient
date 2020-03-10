@@ -11,6 +11,7 @@ import (
 
 // here we create a mock implementation of the DialContext function to avoid having to establish a connection
 var callIdx = 0
+
 func mockDialContext(_ context.Context, _ string, _ ...grpc.DialOption) (*grpc.ClientConn, error) {
 	callIdx++
 	var conn *grpc.ClientConn

@@ -17,10 +17,10 @@ import (
 
 func TestSummationE2E(t *testing.T) {
 	tests := []struct {
-		first int64
-		last int64
+		first  int64
+		last   int64
 		result int64
-		err error
+		err    error
 	}{
 		{2, 2, 4, nil},
 		{math.MaxInt64, 1, 0, status.Errorf(codes.OutOfRange, "summation result exceeds maximum integer value")},
@@ -60,9 +60,9 @@ func TestSummationE2E(t *testing.T) {
 
 func TestFactorialE2E(t *testing.T) {
 	tests := []struct {
-		base int64
+		base   int64
 		result int64
-		err error
+		err    error
 	}{
 		{5, 120, nil},
 		{21, 0, status.Errorf(codes.OutOfRange, "factorial result exceeds maximum integer value")},
