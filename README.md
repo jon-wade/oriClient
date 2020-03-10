@@ -8,7 +8,7 @@ oriClient is a CLI that makes gRPC calls to the `oriServer`, a component part of
 
 1. `go` must be installed, version 1.13.x, to make use of `go modules`. For installation details, please see here:
 https://golang.org/doc/install
-2. `oriServer` must be running as a separate process, details of `oriserver` including installation and spin-up 
+2. `oriServer` must be running as a separate process, details of `oriServer` including installation and spin-up 
 instructions can be found here: https://github.com/jon-wade/oriServer
  
 ## Install
@@ -29,6 +29,12 @@ Usage of ./oriClient:
   -port int
         port number of oriserver, e.g. 50051 (default 50051)
 ```
+
+An example command would be `./oriClient -method=factorial 5` which would request the server to calculate the `5!` at
+address `localhost:50051`. 
+
+Another example, `./oriClient -host=192.168.0.1 -port=8080 summation 2 2` would call the
+`oriServer` at `192.168.0.1:8080` requesting the result of `2 + 2`.
 
 ## Running tests
 
